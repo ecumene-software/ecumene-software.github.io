@@ -3,7 +3,7 @@
 	<head>
 		<title>learningthree.js boiler plate for three.js</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<meta name="viewport" content="width: 400px; height: 300px, user-scalable=no">
 
 
 		<script src="build/three.js"></script>
@@ -13,19 +13,8 @@
     <script src="js/controls/TrackballControls.js"></script>
 	</head>
 <body>
-	<!-- three.js container -->
-    	<div id="container"></div>
-	<!-- info on screen display -->
-	<div id="info">
-		<div class="top">
-			<a href="http://learningthreejs.com/blog/2011/12/20/boilerplate-for-three-js/" target="_blank">LearningThree.js</a>
-			boiler plate for
-			<a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a>
-		</div>
-		<div class="bottom" id="inlineDoc" >
-			- <i>p</i> for screenshot
-		</div>
-	</div>
+
+  <div id="container"></div>
 
   <script type="x-shader/x-vertex" id="vertexShader">
     varying vec3 vWorldPosition;
@@ -83,14 +72,13 @@
 
 
       hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
-      hemiLight.color.setHSL( 0.6, 1, 0.6 );
-      hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+      hemiLight.color.setRGB( 0.5, 0.5, 0.5 );
+      hemiLight.groundColor.setRGB( 0.5, 0.5, 0.5 );
       hemiLight.position.set( 0, 500, 0 );
       scene.add( hemiLight );
 
-
 			dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
-			dirLight.color.setHSL( 0.1, 1, 0.95 );
+			dirLight.color.setRGB( 1, 1, 1 );
 			dirLight.position.set( -1, 1.75, 1 );
 			dirLight.position.multiplyScalar( 50 );
 			scene.add( dirLight );
@@ -109,7 +97,7 @@
 
       var groundGeo = new THREE.PlaneBufferGeometry( 10000, 10000 );
       var groundMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
-      groundMat.color.setHSL( 0.095, 1, 0.75 );
+      groundMat.color.setHSL( 1, 1, 1 );
 
       var ground = new THREE.Mesh( groundGeo, groundMat );
       ground.rotation.x = -Math.PI/2;
@@ -119,7 +107,7 @@
       var vertexShader = document.getElementById( 'vertexShader' ).textContent;
       var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
       var uniforms = {
-        topColor:    { value: new THREE.Color( 0x0077ff ) },
+        topColor:    { value: new THREE.Color( 0x000000 ) },
         bottomColor: { value: new THREE.Color( 0xffffff ) },
         offset:      { value: 33 },
         exponent:    { value: 0.6 }
@@ -141,9 +129,21 @@
         objLoader.setMaterials(materials);
         objLoader.setPath('model/');
         objLoader.load('soup.obj', function(object) {
-          scene.add(object);
+					var x = 400;
+					var y = 10;
+
+					for(xCount = 0; xCount < x; xCount++){
+						for(yCount = 0; yCount < y; yCount++){
+							var objectClone = object.clone();
+							object.position.x = xCount*4.65 - (x*4.65/2);
+							object.position.y = yCount*6.78;
+							scene.add(objectClone);
+					  }
+					}
         });
       });
+
+
 
       if( Detector.webgl ){
         renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -163,25 +163,15 @@
 
 		}
 
-		// animation loop
 		function animate() {
-
-			// loop on request animation loop
-			// - it has to be at the begining of the function
-			// - see details at http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 			requestAnimationFrame( animate );
       cameraControl.update();
-			// do the render
 			render();
 
 		}
 
 		// render the scene
 		function render() {
-      renderer.clearColor(1, 1, 1, 1 );
-      renderer.clear(render.COLOR_BUFFER_BIT);
-
-			// actually render the scene
 			renderer.render( scene, camera );
 		}
 	</script>
