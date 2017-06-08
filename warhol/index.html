@@ -3,18 +3,64 @@
 	<head>
 		<title>learningthree.js boiler plate for three.js</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width: 400px; height: 300px, user-scalable=no">
 
+		<link href="https://fonts.googleapis.com/css?family=Cormorant+SC" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Mogra" rel="stylesheet">
 
 		<script src="build/three.js"></script>
     <script src="js/Detector.js"></script>
     <script src="js/loaders/OBJLoader.js"></script>
     <script src="js/loaders/MTLLoader.js"></script>
     <script src="js/controls/TrackballControls.js"></script>
+		<script
+		  src="https://code.jquery.com/jquery-3.2.1.js"
+		  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+		  crossorigin="anonymous"></script>
+		<style>
+		#container {
+				box-shadow: 0.1vw -0.1vw 5vw #888888;
+				background-color: #fff;
+				width: 100%;
+				height: 40vh;
+				padding: 0px;
+		}
+		#message {
+				background-color: #fff;
+				width: 100%;
+				height: 40vh;
+				text-align: center;
+				vertical-align: middle;
+				line-height: 10vh;
+				font-family: 'Cormorant SC', serif;
+				font-style: italic;
+		}
+		#spacer{
+				line-height: 6vh;
+		}
+		a, a:link, a:active, a:visited {
+			font-family: 'Mogra', cursive;
+			color: #8f8f8f;
+			text-decoration: none;
+		}
+		 a:hover {
+			 color: #8f8f8ff;
+ 			 font-style: italic;
+			 font-family: 'Mogra', cursive;
+			 text-decoration: none;
+		}
+		#footer {
+			position:fixed;
+	    bottom:0;
+		}
+		</style>
 	</head>
 <body>
 
   <div id="container"></div>
+	<br id=spacer>
+	<hr>
+	<div id="message">EAT YOUR HEART OUT, ANDY WARHOL</div>
+	<footer id=footer><a href="http://ecumene.xyz">return to ecumene.xyz</a></footer>
 
   <script type="x-shader/x-vertex" id="vertexShader">
     varying vec3 vWorldPosition;
@@ -39,61 +85,35 @@
 
 
 	<script type="text/javascript">
-		var stats, scene, renderer;
-		var camera, cameraControl;
-
+		var stats, scene, renderer, clock;
+		var camera;
 
 		if( !init() )	animate();
 
 		// init the scene
 		function init(){
+			container = document.getElementById('container');
+			clock = new THREE.Clock();
 
 			// create a scene
 			scene = new THREE.Scene();
 
-			scene.fog = new THREE.Fog( 0xffffff, 1, 5000 );
+			scene.fog = new THREE.Fog( 0xffffff, 1, 1000 );
 			scene.fog.color.setHSL( 0.6, 0, 1 );
 
 			// put a camera in the scene
-			camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 10000 );
-			camera.position.set(0, 0, 20);
+			camera = new THREE.PerspectiveCamera(35, $(container).width() / $(container).height(), 1, 10000 );
+			camera.position.set(-20, 10, 20);
+			camera.up = new THREE.Vector3(0,1,0);
+			camera.lookAt(new THREE.Vector3(20,5,0));
 			scene.add(camera);
-
-      cameraControl = new THREE.TrackballControls( camera );
-      cameraControl.rotateSpeed = 1.0;
-      cameraControl.zoomSpeed = 1.2;
-      cameraControl.panSpeed = 0.8;
-      cameraControl.noZoom = false;
-      cameraControl.noPan = false;
-      cameraControl.staticMoving = true;
-      cameraControl.dynamicDampingFactor = 0.3;
-      cameraControl.keys = [ 65, 83, 68 ];
-      cameraControl.addEventListener( 'change', render );
-
-
-      hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
-      hemiLight.color.setRGB( 0.5, 0.5, 0.5 );
-      hemiLight.groundColor.setRGB( 0.5, 0.5, 0.5 );
-      hemiLight.position.set( 0, 500, 0 );
-      scene.add( hemiLight );
 
 			dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
 			dirLight.color.setRGB( 1, 1, 1 );
-			dirLight.position.set( -1, 1.75, 1 );
+			dirLight.position.set( 0, 0, 1 );
 			dirLight.position.multiplyScalar( 50 );
 			scene.add( dirLight );
-
-      dirLight.castShadow = true;
-      dirLight.shadow.mapSize.width = 2048;
-      dirLight.shadow.mapSize.height = 2048;
       var d = 50;
-
-      dirLight.shadow.camera.left = -d;
-      dirLight.shadow.camera.right = d;
-      dirLight.shadow.camera.top = d;
-      dirLight.shadow.camera.bottom = -d;
-      dirLight.shadow.camera.far = 3500;
-      dirLight.shadow.bias = -0.0001;
 
       var groundGeo = new THREE.PlaneBufferGeometry( 10000, 10000 );
       var groundMat = new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x050505 } );
@@ -107,17 +127,23 @@
       var vertexShader = document.getElementById( 'vertexShader' ).textContent;
       var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
       var uniforms = {
-        topColor:    { value: new THREE.Color( 0x000000 ) },
+        topColor:    { value: new THREE.Color( 0xf0f0f0 ) },
         bottomColor: { value: new THREE.Color( 0xffffff ) },
         offset:      { value: 33 },
         exponent:    { value: 0.6 }
       };
-      uniforms.topColor.value.copy( hemiLight.color );
       scene.fog.color.copy( uniforms.bottomColor.value );
       var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
+			var planeGeo = new THREE.PlaneGeometry( 10000, 10000, 1, 1 );
       var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
+			var planeMat = new THREE.MeshBasicMaterial( {color: 0xffffff, side: THREE.DoubleSide} );
       var sky = new THREE.Mesh( skyGeo, skyMat );
-      scene.add( sky );
+			var plane = new THREE.Mesh( planeGeo, planeMat );
+			plane.rotateX(1.5708);
+			plane.position.set(0, -7.5/2, 0)
+
+			scene.add( sky );
+			scene.add( plane );
 
       var objLoader = new THREE.OBJLoader();
       var mtlLoader = new THREE.MTLLoader();
@@ -129,45 +155,44 @@
         objLoader.setMaterials(materials);
         objLoader.setPath('model/');
         objLoader.load('soup.obj', function(object) {
-					var x = 400;
-					var y = 10;
-
-					for(xCount = 0; xCount < x; xCount++){
+					var x = 20;
+					var y = 5;
+					for(xCount = 0; xCount < (x*30); xCount++){
 						for(yCount = 0; yCount < y; yCount++){
 							var objectClone = object.clone();
-							object.position.x = xCount*4.65 - (x*4.65/2);
-							object.position.y = yCount*6.78;
+							objectClone.rotateY(Math.random() *0.7 * 1.5708 - 0.1);
+							objectClone.position.x = xCount*4.65 - (x*4.65/5);
+							objectClone.position.y = yCount*6.78;
 							scene.add(objectClone);
 					  }
 					}
         });
       });
 
-
-
       if( Detector.webgl ){
         renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setClearColor( scene.fog.color );
 				renderer.setPixelRatio( window.devicePixelRatio );
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( $(container).width(),$(container).height() );
 				container.appendChild( renderer.domElement );
 				renderer.gammaInput = true;
 				renderer.gammaOutput = true;
-				renderer.shadowMap.enabled = true;
-				renderer.shadowMap.renderReverseSided = false;
+				renderer.shadowMap.enabled = false;
 			}else{
 			  	Detector.addGetWebGLMessage();
 			    return true;
 			}
-			document.getElementById('container').appendChild(renderer.domElement);
-
+			container.appendChild(renderer.domElement);
 		}
+
+		var x;
 
 		function animate() {
 			requestAnimationFrame( animate );
-      cameraControl.update();
 			render();
-
+			x += 1;
+			if(camera.position.x > 20*3) camera.position.x = 0;
+			camera.position.x += clock.getDelta();
 		}
 
 		// render the scene
