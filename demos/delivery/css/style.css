@@ -269,11 +269,8 @@ header .intro-text {
 }
 header .intro-text .intro-lead-in {
   font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-shadow: 2px 0px 2px #000000;
-  background-color: #FF0000;
-  -ms-transform: skewX(-10deg); /* IE 9 */
-  -webkit-transform: skewX(-10deg); /* Safari */
-  transform: skewX(-10deg);
+  text-shadow: 0px 0px 2px #000000;
+  background-color: rgba(0, 0, 0, 0.4);
   font-size: 22px;
   line-height: 22px;
   margin-top: 50px;
