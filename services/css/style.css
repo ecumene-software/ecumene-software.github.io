@@ -67,6 +67,9 @@ h1, h2, h3, h4 {
   padding: 2px 13px 2px 13px;
   display: inline-block;
 }
+h3, h4 {
+  box-shadow: -10px 0px 0px #85BB65;
+}
 img#me {
   width: 30%;
   align: right;
