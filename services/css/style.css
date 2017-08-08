@@ -18,8 +18,11 @@ footer {
   height:100px;
 }
 div.lets-go {
+  border-style: dashed;
+  box-shadow: -10px 0px 0px #000000;
   padding: 13px;
   background: #FFF6DC;
+  border-color: #efe7ce;
 }
 div.row {
   overflow:hidden;
@@ -40,9 +43,14 @@ div.right-shadow img {
 div.left-shadow img {
   box-shadow: -10px 0px 0px #000000;
 }
+@media only screen and (max-width: 767px), only screen and (max-device-width: 767px) {
+  div.right-shadow img {
+    box-shadow: -10px 0px 0px #000000;
+  }
+}
 p#email{
   font-family: 'Roboto', sans-serif;
-  font-size: 20px;
+  font-size: 16px;
 }
 p{
   font-size: 22px;
