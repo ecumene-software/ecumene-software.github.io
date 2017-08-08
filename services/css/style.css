@@ -17,9 +17,6 @@ footer {
   font-family: 'Roboto', sans-serif;
   height:100px;
 }
-i.size-icon {
-  font-size: 30px;
-}
 div.lets-go {
   padding: 13px;
   background: #FFF6DC;
@@ -45,7 +42,7 @@ div.left-shadow img {
 }
 p#email{
   font-family: 'Roboto', sans-serif;
-  font-size: 25px;
+  font-size: 20px;
 }
 p{
   font-size: 22px;
