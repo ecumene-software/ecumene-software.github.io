@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata|Oswald:400|Raleway:200');
+
+.oswald {
+  font-family: 'Oswald', sans-serif;
+}
+
+.inconsolata {
+  font-family: 'Inconsolata', monospace;
+}
+
+.raleway {
+  font-family: 'Raleway', sans-serif;
+}
+
+.big-bar {
+  padding: 25px;
+}
+
+.transform-capitalize {
+  text-transform: uppercase;
+}
+
+.sidebar > img {
+  box-shadow: 0px 1px 2px #010101;
+}
+
+.sidebar > a > .fa {
+  font-size: 40px;
+  color: #0f0f0f;
+  transition: all .2s ease-in-out;
+}
+
+.sidebar > a:hover {
+  text-decoration: none;
+}
+
+.sidebar > a > .fa:hover {
+  transform: scale(1.1);
+  -moz-transition: scale(1.1);
+  -webkit-transition: scale(1.1);
+}
+
+.rye {
+  padding: 25px;
+}
+
+.profile > .row > .col-sm-6 > a > img {
+  box-shadow: 0px 1px 2px #010101;
+  padding: 15px;
+}
+
+.profile > .row > .col-sm-6 {
+  padding-bottom: 25px;
+  padding-left: 25px;
+  transition: all .2s ease-in-out;
+}
+
+.profile > .row > .col-sm-6:hover {
+  transform: scale(1.05);
+  -moz-transition: scale(1.05);
+  -webkit-transition: scale(1.05);
+}
+
+@media (max-width: 576px) {
+  .sidebar {
+    padding: 50px;
+  }
+}
